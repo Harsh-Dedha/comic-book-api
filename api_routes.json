@@ -1,0 +1,245 @@
+{
+  "comic_routes": [
+    {
+      "method": "GET",
+      "path": "/api/comics",
+      "description": "Get all comics with pagination and filtering",
+      "query_params": [
+        { "name": "page", "type": "integer", "default": 1, "description": "Page number" },
+        { "name": "limit", "type": "integer", "default": 10, "description": "Number of comics per page" },
+        { "name": "genre", "type": "string", "description": "Filter by genre" },
+        { "name": "tags", "type": "string", "description": "Filter by tags (comma-separated)" }
+      ],
+      "success_response": {
+        "status_code": 200,
+        "body": {
+          "total": "integer",
+          "page": "integer",
+          "pages": "integer",
+          "results": [
+            {
+              "_id": "string",
+              "title": "string",
+              "year": "number",
+              "link": "string",
+              "processing_status": "string",
+              "genre": "string",
+              "tags": ["string"],
+              "number_of_chapters": "number",
+              "poster": "string",
+              "last_updated": "Date"
+            }
+          ]
+        }
+      },
+      "error_response": {
+        "status_code": 500,
+        "body": {
+          "error": "Error fetching comics"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/comics/search",
+      "description": "Search comics by title",
+      "query_params": [
+        { "name": "q", "type": "string", "required": true, "description": "Search query" },
+        { "name": "page", "type": "integer", "default": 1, "description": "Page number" },
+        { "name": "limit", "type": "integer", "default": 10, "description": "Number of comics per page" }
+      ],
+      "success_response": {
+        "status_code": 200,
+        "body": {
+          "total": "integer",
+          "page": "integer",
+          "pages": "integer",
+          "results": [
+            {
+              "_id": "string",
+              "title": "string",
+              "year": "number",
+              "link": "string",
+              "processing_status": "string",
+              "genre": "string",
+              "tags": ["string"],
+              "number_of_chapters": "number",
+              "poster": "string",
+              "last_updated": "Date",
+              "score": "number"
+            }
+          ]
+        }
+      },
+      "error_responses": [
+        {
+          "status_code": 400,
+          "body": {
+            "error": "Search query required"
+          }
+        },
+        {
+          "status_code": 500,
+          "body": {
+            "error": "Error searching comics"
+          }
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/comics/:id",
+      "description": "Get comic by ID",
+      "path_params": [
+        { "name": "id", "type": "string", "description": "Comic ID" }
+      ],
+      "success_response": {
+        "status_code": 200,
+        "body": {
+          "_id": "string",
+          "title": "string",
+          "year": "number",
+          "link": "string",
+          "processing_status": "string",
+          "genre": "string",
+          "tags": ["string"],
+          "number_of_chapters": "number",
+          "poster": "string",
+          "last_updated": "Date"
+        }
+      },
+      "error_responses": [
+        {
+          "status_code": 404,
+          "body": {
+            "error": "Comic not found"
+          }
+        },
+        {
+          "status_code": 500,
+          "body": {
+            "error": "Error fetching comic"
+          }
+        }
+      ]
+    }
+  ],
+  "chapter_routes": [
+    {
+      "method": "GET",
+      "path": "/api/chapters",
+      "description": "Get all chapters with pagination and filtering",
+      "query_params": [
+        { "name": "page", "type": "integer", "default": 1, "description": "Page number" },
+        { "name": "limit", "type": "integer", "default": 10, "description": "Number of chapters per page" },
+        { "name": "comic_id", "type": "ObjectId", "description": "Filter by comic ID" },
+        { "name": "sort", "type": "string", "default": "date_desc", "enum": ["date_desc", "date_asc"], "description": "Sort order" }
+      ],
+      "success_response": {
+        "status_code": 200,
+        "body": {
+          "total": "integer",
+          "page": "integer",
+          "pages": "integer",
+          "results": [
+            {
+              "_id": "ObjectId",
+              "comic_id": "string",
+              "name": "string",
+              "link": "string",
+              "date": "Date",
+              "page_links": ["string"],
+              "totalPages": "number",
+              "page_scrape_status": "string",
+              "chapter_id": "string",
+              "last_updated": "Date"
+            }
+          ]
+        }
+      },
+      "error_response": {
+        "status_code": 500,
+        "body": {
+          "error": "Error fetching chapters"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/chapters/comic/:comicId",
+      "description": "Get chapters by comic ID",
+      "path_params": [
+        { "name": "comicId", "type": "ObjectId", "description": "Comic ID" }
+      ],
+      "query_params": [
+        { "name": "page", "type": "integer", "default": 1, "description": "Page number" },
+        { "name": "limit", "type": "integer", "default": 10, "description": "Number of chapters per page" }
+      ],
+      "success_response": {
+        "status_code": 200,
+        "body": {
+          "total": "integer",
+          "page": "integer",
+          "pages": "integer",
+          "results": [
+            {
+              "_id": "ObjectId",
+              "comic_id": "string",
+              "name": "string",
+              "link": "string",
+              "date": "Date",
+              "page_links": ["string"],
+              "totalPages": "number",
+              "page_scrape_status": "string",
+              "chapter_id": "string",
+              "last_updated": "Date"
+            }
+          ]
+        }
+      },
+      "error_response": {
+        "status_code": 500,
+        "body": {
+          "error": "Error fetching chapters for comic"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/chapters/:id",
+      "description": "Get chapter by ID",
+      "path_params": [
+        { "name": "id", "type": "string", "description": "Chapter ID (refers to chapter_id field)" }
+      ],
+      "success_response": {
+        "status_code": 200,
+        "body": {
+          "_id": "ObjectId",
+          "comic_id": "string",
+          "name": "string",
+          "link": "string",
+          "date": "Date",
+          "page_links": ["string"],
+          "totalPages": "number",
+          "page_scrape_status": "string",
+          "chapter_id": "string",
+          "last_updated": "Date"
+        }
+      },
+      "error_responses": [
+        {
+          "status_code": 404,
+          "body": {
+            "error": "Chapter not found"
+          }
+        },
+        {
+          "status_code": 500,
+          "body": {
+            "error": "Error fetching chapter"
+          }
+        }
+      ]
+    }
+  ]
+}
